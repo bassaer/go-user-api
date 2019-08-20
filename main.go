@@ -12,7 +12,7 @@ import (
 
 func main() {
 	mux := http.NewServeMux()
-	mux.Handle("/", NewHandler())
+	mux.Handle("/", NewHandler(&UserRepository{}))
 
 	svr := &http.Server{
 		Addr:    ":8080",

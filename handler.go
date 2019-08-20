@@ -11,9 +11,9 @@ type Handler struct {
 }
 
 // NewHandler is
-func NewHandler() *Handler {
+func NewHandler(r Repository) *Handler {
 	return &Handler{
-		repo: &UserRepository{},
+		repo: r,
 	}
 }
 

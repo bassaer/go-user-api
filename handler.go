@@ -1,18 +1,33 @@
 package main
 
 import (
-	"fmt"
+	"encoding/json"
 	"net/http"
 )
 
 // Handler is
-type Handler struct{}
+type Handler struct {
+	repo Repository
+}
 
 // NewHandler is
-func NewHandler() *Handler {
-	return &Handler{}
+func NewHandler(r Repository) *Handler {
+	return &Handler{
+		repo: r,
+	}
 }
 
 func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "OK\n")
+	if r.Method == http.MethodGet {
+		id := r.URL.Query().Get("id")
+		if user, err := h.repo.Get(id); err == nil {
+			bytes, _ := json.Marshal(user)
+			w.Write(bytes)
+			return
+		}
+	} else if r.Method == http.MethodPost {
+		w.WriteHeader(http.StatusOK)
+		return
+	}
+	w.WriteHeader(http.StatusMethodNotAllowed)
 }

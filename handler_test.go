@@ -7,9 +7,9 @@ import (
 	"time"
 )
 
-type MockRepository struct{}
+type mockRepository struct{}
 
-func (m *MockRepository) Get(id string) (*User, error) {
+func (m *mockRepository) Get(id string) (*User, error) {
 	return &User{
 		ID:        id,
 		Name:      "testname",
@@ -18,7 +18,7 @@ func (m *MockRepository) Get(id string) (*User, error) {
 
 }
 
-func (m *MockRepository) Set(user User) error {
+func (m *mockRepository) Set(user User) error {
 	return nil
 }
 
@@ -26,7 +26,7 @@ func TestHandler(t *testing.T) {
 	req := httptest.NewRequest("GET", "/?id=testid", nil)
 	rec := httptest.NewRecorder()
 
-	handler := NewHandler(&MockRepository{})
+	handler := NewHandler(&mockRepository{})
 	handler.ServeHTTP(rec, req)
 
 	if rec.Code != http.StatusOK {

@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 )
 
@@ -17,16 +18,23 @@ func NewHandler(r Repository) *Handler {
 	}
 }
 
+func (h *Handler) get(id string) ([]byte, error) {
+	user, err := h.repo.Get(id)
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(user)
+}
+
 func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
 		id := r.URL.Query().Get("id")
-		if user, err := h.repo.Get(id); err == nil {
-			bytes, _ := json.Marshal(user)
+		if bytes, err := h.get(id); err == nil {
 			w.Write(bytes)
 			return
 		}
 	} else if r.Method == http.MethodPost {
-		w.WriteHeader(http.StatusOK)
+		fmt.Fprintf(w, "OK")
 		return
 	}
 	w.WriteHeader(http.StatusMethodNotAllowed)

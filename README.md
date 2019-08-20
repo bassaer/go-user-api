@@ -1,5 +1,7 @@
 # go-user-api
 
+[![Build Status](https://travis-ci.com/bassaer/go-user-api.svg?branch=master)](https://travis-ci.com/bassaer/go-user-api)
+
 ```
 ❯ sudo docker run -d -p 8080:8080 go-user-api
 ```

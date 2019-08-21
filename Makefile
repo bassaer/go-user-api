@@ -6,5 +6,9 @@ build:
 test:
 	go test -v -cover -race ./...
 
+lint:
+	go vet ./...
+	golint -set_exit_status ./...
+
 clean:
 	rm -f userapi

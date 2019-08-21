@@ -8,11 +8,13 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
+
+	app "github.com/bassaer/go-user-api/pkg"
 )
 
 func main() {
 	mux := http.NewServeMux()
-	mux.Handle("/", NewHandler(&UserRepository{}))
+	mux.Handle("/", app.NewHandler(&app.UserRepository{}))
 
 	svr := &http.Server{
 		Addr:    ":8080",

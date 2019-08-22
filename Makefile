@@ -1,16 +1,15 @@
 .PHONY: build test clean
 
 build:
-	go build ./app/cmd/userapi/
+	go build ./cmd/userapi/
 
 test:
-	go test -v -cover -race ./app/...
+	go test -v -cover -race ./...
 
 lint:
-	go vet ./app/...
-	golint -set_exit_status ./app/...
+	go vet ./...
+	golint -set_exit_status ./...
 
 clean:
 	rm -f userapi
 	sudo rm -rf db/data
-	sudo rm -rf log

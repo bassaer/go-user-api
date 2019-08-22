@@ -1,4 +1,6 @@
-.PHONY: build test clean
+.PHONY: build test lint clean
+
+all: build test lint
 
 build:
 	go build ./app/cmd/userapi/

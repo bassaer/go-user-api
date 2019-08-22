@@ -12,17 +12,6 @@ services:
       MYSQL_USER: test
       MYSQL_PASSWORD:  test
     volumes:
+      - ./db/data:/var/lib/mysql
       - ./db/initdb.d:/docker-entrypoint-initdb.d
       - ./db/conf.d:/etc/mysql/conf.d
-  app:
-    links:
-      - db
-    build:
-      context: .
-      dockerfile: ./app/Dockerfile
-    container_name: userapi-container
-    ports:
-      - '8080:8080'
-    volumes:
-      - .:/go/src/go-user-api
-    command: go build ./app/cmd/userapi/

@@ -14,5 +14,3 @@ lint:
 
 clean:
 	rm -f userapi
-	sudo rm -rf db/data
-	sudo rm -rf log

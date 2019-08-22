@@ -9,7 +9,7 @@ import (
 	"syscall"
 	"time"
 
-	app "github.com/bassaer/go-user-api/pkg"
+	app "github.com/bassaer/go-user-api/app/pkg"
 )
 
 func main() {

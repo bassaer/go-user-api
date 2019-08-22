@@ -12,3 +12,4 @@
 *.out
 
 /go-user-api
+/db/data

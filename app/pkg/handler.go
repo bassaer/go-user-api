@@ -29,13 +29,13 @@ func (h *Handler) get(id string) ([]byte, error) {
 func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
 		id := r.URL.Query().Get("id")
-		if bytes, err := h.get(id); err == nil {
-			w.Write(bytes)
+		bytes, err := h.get(id)
+		if err != nil {
+			w.WriteHeader(http.StatusMethodNotAllowed)
 			return
 		}
+		w.Write(bytes)
 	} else if r.Method == http.MethodPost {
 		fmt.Fprintf(w, "OK")
-		return
 	}
-	w.WriteHeader(http.StatusMethodNotAllowed)
 }

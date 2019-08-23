@@ -29,5 +29,3 @@ services:
       - .:/go/src/go-user-api
       - /etc/localtime:/etc/localtime:ro
     command: ["./app/scripts/wait-for-it.sh", "db:3306", "--", "/go/bin/userapi"]
-        #command: ["ls", "-l", "/go/bin/userapi"]
-        #command: ["ls", "-l", "/go/src/github.com/bassaer/go-user-api"]

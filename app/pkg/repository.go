@@ -2,7 +2,7 @@ package app
 
 import (
 	"database/sql"
-	"time"
+	"strconv"
 
 	// MySql driver
 	_ "github.com/go-sql-driver/mysql"
@@ -49,18 +49,16 @@ func NewUserRepository() (*UserRepository, error) {
 
 // Get is
 func (u *UserRepository) Get(reqID string) (*User, error) {
-	var id string
-	var name string
-	var createdAt time.Time
-	err := u.stmtOut.QueryRow(reqID).Scan(&id, &name, &createdAt)
+	user := &User{}
+	id, err := strconv.Atoi(reqID)
 	if err != nil {
 		return nil, err
 	}
-	return &User{
-		ID:        id,
-		Name:      name,
-		CreatedAt: createdAt,
-	}, nil
+	err = u.stmtOut.QueryRow(id).Scan(&user.ID, &user.Name, &user.CreatedAt)
+	if err != nil {
+		return nil, err
+	}
+	return user, nil
 }
 
 // Set is

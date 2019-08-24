@@ -5,17 +5,18 @@ services:
     container_name: mysql-container
     restart: always
     ports:
-      - '3306:3306'
+      - 3306:3306
     environment:
       MYSQL_DATABASE: userdb
       MYSQL_ROOT_PASSWORD: test
       MYSQL_USER: test
       MYSQL_PASSWORD:  test
+      TZ: Asia/Tokyo
     volumes:
       - ./db/initdb.d:/docker-entrypoint-initdb.d
       - ./db/conf.d:/etc/mysql/conf.d
   app:
-    links:
+    depends_on:
       - db
     build:
       context: .
@@ -23,6 +24,8 @@ services:
     container_name: userapi-container
     ports:
       - '8080:8080'
+    working_dir: /go/src/github.com/bassaer/go-user-api
     volumes:
       - .:/go/src/go-user-api
-    command: go build ./app/cmd/userapi/
+      - /etc/localtime:/etc/localtime:ro
+    command: ["./app/scripts/wait-for-it.sh", "db:3306", "--", "/go/bin/userapi"]

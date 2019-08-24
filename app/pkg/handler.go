@@ -2,7 +2,7 @@ package app
 
 import (
 	"encoding/json"
-	"fmt"
+	"log"
 	"net/http"
 )
 
@@ -26,16 +26,33 @@ func (h *Handler) get(id string) ([]byte, error) {
 	return json.Marshal(user)
 }
 
+func (h *Handler) set(user *User) error {
+	return h.repo.Set(user)
+}
+
 func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
 		id := r.URL.Query().Get("id")
-		bytes, err := h.get(id)
-		if err != nil {
+		if bytes, err := h.get(id); err == nil {
+			w.Write(bytes)
+			return
+		}
+	} else if r.Method == http.MethodPost {
+		user := &User{}
+		if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
 			w.WriteHeader(http.StatusMethodNotAllowed)
 			return
 		}
-		w.Write(bytes)
-	} else if r.Method == http.MethodPost {
-		fmt.Fprintf(w, "OK")
+		if err := h.set(user); err != nil {
+			log.Println(err)
+			w.WriteHeader(http.StatusMethodNotAllowed)
+			return
+		}
+		if bytes, err := json.Marshal(user); err == nil {
+			w.Write(bytes)
+			return
+		}
 	}
+	w.WriteHeader(http.StatusMethodNotAllowed)
+	return
 }

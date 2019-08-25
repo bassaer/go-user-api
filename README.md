@@ -2,22 +2,32 @@
 
 [![Build Status](https://travis-ci.com/bassaer/go-user-api.svg?branch=master)](https://travis-ci.com/bassaer/go-user-api)
 
+### build
+
 ```
 ❯ docker-compose up -d --build
 ```
 
+### log
 ```
-❯ curl '192.168.33.10:8080'
-{"id":"testid","name":"testname","created_at":"2019-08-21T14:06:53.145415733Z"}
+❯ docker-compose logs -f
 ```
 
+### usage
+
 ```
-❯ mysql -u test -p -s -t --host=127.0.0.1
-Enter password:
-mysql> select * from userdb.users;
-+--------+----------+---------------------+
-| id     | name     | created_at          |
-+--------+----------+---------------------+
-| testid | testuser | 2019-08-22 10:31:08 |
-+--------+----------+---------------------+
+❯ curl -sS '192.168.33.10:8080' -X POST -d "{\"name\": \"foobar\"}" | python -m json.tool
+{
+    "id": "173067cf-2c5a-4871-8309-17b53255576e",
+    "name": "foobar",
+    "created_at": "2019-08-25T02:55:43.762111941+09:00"
+}
+```
+```
+❯ curl -sS '192.168.33.10:8080?id=173067cf-2c5a-4871-8309-17b53255576e' | python -m json.tool
+{
+    "id": "173067cf-2c5a-4871-8309-17b53255576e",
+    "name": "foobar",
+    "created_at": "2019-08-25T02:55:44+09:00"
+}
 ```

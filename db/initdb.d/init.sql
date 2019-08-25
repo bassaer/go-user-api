@@ -1,10 +1,10 @@
 DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (
-    id INT AUTO_INCREMENT,
+    id BINARY(36) NOT NULL,
     name VARCHAR(32) NOT NULL,
     created_at datetime default current_timestamp,
     PRIMARY KEY (id)
 ) DEFAULT CHARACTER SET=utf8;
 
-INSERT INTO users (name, created_at) VALUES ('bassaer', NOW());
+INSERT INTO users (id, name, created_at) VALUES (UUID(), 'bassaer', NOW());

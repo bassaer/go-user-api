@@ -2,16 +2,12 @@ package app
 
 import (
 	"database/sql"
-	"time"
 
-	// MySql driver
-	_ "github.com/go-sql-driver/mysql"
 	"github.com/google/uuid"
 )
 
 const (
-	auth     = "root:test@tcp(db:3306)/userdb?parseTime=true&loc=Asia%2FTokyo"
-	queryIns = "INSERT INTO users VALUES(?, ?, ?)"
+	queryIns = "INSERT INTO users VALUES (?, ?, ?)"
 	queryOut = "SELECT id, name, created_at FROM users WHERE id = ?"
 )
 
@@ -29,12 +25,7 @@ type UserRepository struct {
 }
 
 // NewUserRepository is
-func NewUserRepository() (*UserRepository, error) {
-	db, err := sql.Open("mysql", auth)
-	if err != nil {
-		return nil, err
-	}
-
+func NewUserRepository(db *sql.DB) (*UserRepository, error) {
 	ins, err := db.Prepare(queryIns)
 	if err != nil {
 		return nil, err
@@ -68,12 +59,13 @@ func (u *UserRepository) Set(user *User) error {
 	if err != nil {
 		return err
 	}
-	now := time.Now()
-	if _, err = u.stmtIns.Exec(id, user.Name, now); err != nil {
+
+	//now := time.Now()
+	if _, err := u.stmtIns.Exec(id, user.Name, user.CreatedAt); err != nil {
 		return err
 	}
 	user.ID = id.String()
-	user.CreatedAt = now
+	//user.CreatedAt = now
 	return nil
 }
 

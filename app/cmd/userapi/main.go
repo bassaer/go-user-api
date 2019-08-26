@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"database/sql"
 	"log"
 	"net/http"
 	"os"
@@ -10,15 +11,23 @@ import (
 	"time"
 
 	app "github.com/bassaer/go-user-api/app/pkg"
+	_ "github.com/go-sql-driver/mysql"
 )
 
+const auth = "root:test@tcp(db:3306)/userdb?parseTime=true&loc=Asia%2FTokyo"
+
 func main() {
-	mux := http.NewServeMux()
-	repo, err := app.NewUserRepository()
+	db, err := sql.Open("mysql", auth)
+	if err != nil {
+		log.Fatal(err)
+	}
+	repo, err := app.NewUserRepository(db)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer repo.Close()
+
+	mux := http.NewServeMux()
 	mux.Handle("/", app.NewHandler(repo))
 
 	svr := &http.Server{

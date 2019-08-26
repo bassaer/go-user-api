@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"time"
 )
 
 // Handler is
@@ -43,6 +44,7 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusMethodNotAllowed)
 			return
 		}
+		user.CreatedAt = time.Now()
 		if err := h.set(user); err != nil {
 			log.Println(err)
 			w.WriteHeader(http.StatusMethodNotAllowed)
